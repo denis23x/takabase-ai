@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "draft-ssr"
+  },
+  "targets": {
+    "draft-ssr": {
+      "hosting": {
+        "draft-api": [
+          "draft-api"
+        ]
+      }
+    }
+  }
+}

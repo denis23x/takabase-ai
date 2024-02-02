@@ -1,0 +1,58 @@
+{
+  "name": "draft-ai",
+  "version": "0.0.1",
+  "description": "Node backend project",
+  "author": "Denis Iakimenko",
+  "private": true,
+  "main": "dist/index.js",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "start": "nodemon src/index.ts",
+    "start:deploy": "firebase use draft-ssr && firebase deploy --only functions,hosting",
+    "build": "tsc -p tsconfig.json && npm run generate:copy",
+    "debug": "nodemon --inspect=0.0.0.0:9229 src/index.ts"
+  },
+  "keywords": [
+    "node",
+    "fastify",
+    "nsfw",
+    "ai",
+    "swagger",
+    "javascript"
+  ],
+  "dependencies": {
+    "@fastify/compress": "^6.2.1",
+    "@fastify/cors": "^8.2.1",
+    "@fastify/env": "^4.2.0",
+    "@fastify/helmet": "^11.1.1",
+    "@fastify/rate-limit": "^8.0.3",
+    "@fastify/swagger": "^8.3.1",
+    "@fastify/swagger-ui": "^2.1.0",
+    "@tensorflow/tfjs-node": "^4.17.0",
+    "dotenv": "^16.0.3",
+    "fastify": "^4.15.0",
+    "firebase-admin": "^11.8.0",
+    "firebase-functions": "^4.3.1",
+    "nsfwjs": "^2.4.2",
+    "openai": "^4.26.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.16.1",
+    "@typescript-eslint/eslint-plugin": "^6.7.2",
+    "@typescript-eslint/parser": "^6.7.2",
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "fastify-tsconfig": "^2.0.0",
+    "firebase-functions-test": "^3.1.0",
+    "nodemon": "^3.0.1",
+    "npm-check-updates": "^16.14.5",
+    "pino-pretty": "^10.0.0",
+    "prettier": "^3.0.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.3"
+  }
+}

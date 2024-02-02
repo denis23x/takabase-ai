@@ -1,0 +1,42 @@
+{
+  "hosting": [
+    {
+      "target": "draft-api",
+      "public": "dist",
+      "rewrites": [
+        {
+          "source": "**",
+          "function": {
+            "functionId": "api",
+            "region": "us-central1"
+          }
+        }
+      ],
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "frameworksBackend": {
+        "region": "us-central1",
+        "maxInstances": 5,
+        "memory": "256MiB"
+      }
+    }
+  ],
+  "functions": [
+    {
+      "source": ".",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run build"
+      ]
+    }
+  ]
+}

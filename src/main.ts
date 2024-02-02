@@ -1,0 +1,99 @@
+/** @format */
+
+import fastify, { FastifyRequest } from 'fastify';
+import fastifyEnv from '@fastify/env';
+import fastifyCors from '@fastify/cors';
+import fastifyCompress from '@fastify/compress';
+import fastifyHelmet from '@fastify/helmet';
+import fastifySwagger from '@fastify/swagger';
+import fastifySwaggerUi from '@fastify/swagger-ui';
+import fastifyRateLimit from '@fastify/rate-limit';
+
+import { envConfig } from './config/env.config';
+import { corsConfig } from './config/cors.config';
+import { loggerConfig } from './config/logger.config';
+import { compressConfig } from './config/compress.config';
+import { helmetConfig } from './config/helmet.config';
+import { swaggerConfig } from './config/swagger.config';
+import { rateLimitConfig } from './config/rate-limit.config';
+
+import openaiPlugin from './plugins/openai.plugin';
+
+import moderationRoutes from './routes/moderation.routes';
+
+import { paramsIdSchema } from './schema/crud/params/params-id.schema';
+import { querystringScopeSchema } from './schema/crud/querystring/querystring-scope.schema';
+import { querystringSearchSchema } from './schema/crud/querystring/querystring-search.schema';
+import { responseErrorSchema } from './schema/crud/response/response-error.schema';
+
+import { moderationSchema } from './schema/moderation.schema';
+
+import { FastifyInstance } from 'fastify/types/instance';
+import { ContentTypeParserDoneFunction } from 'fastify/types/content-type-parser';
+
+export const main = async (): Promise<FastifyInstance> => {
+  const fastifyInstance: FastifyInstance = fastify({
+    ignoreTrailingSlash: true,
+    ignoreDuplicateSlashes: true,
+    ajv: {
+      customOptions: {
+        keywords: ['collectionFormat', 'example']
+      }
+    },
+    logger: loggerConfig
+  });
+
+  // PLUGINS
+
+  await fastifyInstance.register(fastifyEnv, envConfig);
+  await fastifyInstance.register(fastifyCors, corsConfig);
+  await fastifyInstance.register(fastifyCompress, compressConfig);
+  await fastifyInstance.register(fastifyHelmet, helmetConfig);
+  await fastifyInstance.register(fastifyRateLimit, rateLimitConfig);
+
+  await fastifyInstance.register(openaiPlugin);
+
+  // JSON SCHEMA CRUD
+
+  fastifyInstance.addSchema(paramsIdSchema);
+  fastifyInstance.addSchema(querystringScopeSchema);
+  fastifyInstance.addSchema(querystringSearchSchema);
+  fastifyInstance.addSchema(responseErrorSchema);
+
+  // JSON SCHEMA MODELS
+
+  fastifyInstance.addSchema(moderationSchema);
+
+  // SWAGGER
+
+  if (fastifyInstance.config.ENABLE_SWAGGER) {
+    await fastifyInstance.register(fastifySwagger, swaggerConfig);
+    await fastifyInstance.register(fastifySwaggerUi, {
+      routePrefix: '/docs'
+    });
+  }
+
+  // GCP ISSUE
+
+  if (fastifyInstance.config.NODE_ENV === 'production') {
+    // prettier-ignore
+    fastifyInstance.addContentTypeParser('application/json', {}, (request: FastifyRequest, body: any, done: ContentTypeParserDoneFunction) => {
+      done(null, body.body);
+    });
+  }
+
+  // API
+
+  await fastifyInstance.register(
+    async (api: FastifyInstance): Promise<void> => {
+      api.register(moderationRoutes, {
+        prefix: '/moderation/'
+      });
+    },
+    {
+      prefix: '/api/v1'
+    }
+  );
+
+  return fastifyInstance;
+};
