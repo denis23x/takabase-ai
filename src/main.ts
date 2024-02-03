@@ -17,13 +17,11 @@ import { helmetConfig } from './config/helmet.config';
 import { swaggerConfig } from './config/swagger.config';
 import { rateLimitConfig } from './config/rate-limit.config';
 
+import nsfwPlugin from './plugins/nsfw.plugin';
 import openaiPlugin from './plugins/openai.plugin';
 
-import moderationRoutes from './routes/moderation.routes';
+import moderationRoutes from './routes/moderation';
 
-import { paramsIdSchema } from './schema/crud/params/params-id.schema';
-import { querystringScopeSchema } from './schema/crud/querystring/querystring-scope.schema';
-import { querystringSearchSchema } from './schema/crud/querystring/querystring-search.schema';
 import { responseErrorSchema } from './schema/crud/response/response-error.schema';
 
 import { moderationSchema } from './schema/moderation.schema';
@@ -51,13 +49,11 @@ export const main = async (): Promise<FastifyInstance> => {
   await fastifyInstance.register(fastifyHelmet, helmetConfig);
   await fastifyInstance.register(fastifyRateLimit, rateLimitConfig);
 
+  await fastifyInstance.register(nsfwPlugin);
   await fastifyInstance.register(openaiPlugin);
 
   // JSON SCHEMA CRUD
 
-  fastifyInstance.addSchema(paramsIdSchema);
-  fastifyInstance.addSchema(querystringScopeSchema);
-  fastifyInstance.addSchema(querystringSearchSchema);
   fastifyInstance.addSchema(responseErrorSchema);
 
   // JSON SCHEMA MODELS

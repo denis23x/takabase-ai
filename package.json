@@ -10,10 +10,10 @@
     "node": "18"
   },
   "scripts": {
-    "start": "nodemon src/index.ts",
+    "start:dev": "nodemon src/index.ts",
     "start:deploy": "firebase use draft-ssr && firebase deploy --only functions,hosting",
-    "build": "tsc -p tsconfig.json && npm run generate:copy",
-    "debug": "nodemon --inspect=0.0.0.0:9229 src/index.ts"
+    "start:debug": "nodemon --inspect=0.0.0.0:9229 src/index.ts",
+    "build:prod": "tsc -p tsconfig.json"
   },
   "keywords": [
     "node",

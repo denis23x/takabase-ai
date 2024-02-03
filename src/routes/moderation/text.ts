@@ -11,37 +11,22 @@ export default async function (fastify: FastifyInstance): Promise<void> {
       tags: ['Moderation'],
       description: 'Moderates a text',
       body: {
-        anyOf: [
-          {
-            type: 'object',
-            properties: {
-              model: {
-                type: 'string'
-              },
-              input: {
-                type: 'string'
-              }
-            },
-            required: ['input'],
-            additionalProperties: false
+        type: 'object',
+        properties: {
+          model: {
+            type: 'string',
+            default: 'text-moderation-stable'
           },
-          {
-            type: 'object',
-            properties: {
-              model: {
-                type: 'string'
-              },
-              input: {
-                type: 'array',
-                items: {
-                  type: 'string'
-                }
-              }
+          input: {
+            type: 'array',
+            items: {
+              type: 'string'
             },
-            required: ['input'],
-            additionalProperties: false
+            default: ['Some dirty dirty text here']
           }
-        ]
+        },
+        required: ['model', 'input'],
+        additionalProperties: false
       },
       response: {
         200: {

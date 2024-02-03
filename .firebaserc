@@ -5,8 +5,8 @@
   "targets": {
     "draft-ssr": {
       "hosting": {
-        "draft-api": [
-          "draft-api"
+        "draft-ai": [
+          "draft-ai"
         ]
       }
     }

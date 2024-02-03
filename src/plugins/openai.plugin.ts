@@ -5,7 +5,7 @@ import { FastifyInstance, FastifyPluginAsync } from 'fastify';
 import { openaiConfig } from '../config/openai.config';
 import OpenAI from 'openai';
 
-const openaiPlugin: FastifyPluginAsync = fp(async function openaiPlugin(fastifyInstance: FastifyInstance) {
+const openaiPlugin: FastifyPluginAsync = fp(async function (fastifyInstance: FastifyInstance) {
   fastifyInstance.decorate('openai', new OpenAI(openaiConfig));
 });
 
