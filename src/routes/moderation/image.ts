@@ -20,7 +20,13 @@ export default async function (fastify: FastifyInstance): Promise<void> {
         properties: {
           model: {
             type: 'string',
-            default: 'graph'
+            // default: 'gantman-inception-v3'
+            // default: 'gantman-inception-v3-quantized'
+            default: 'gantman-mobilenet-v2'
+            // default: 'gantman-mobilenet-v2-quantized'
+            // default: 'nsfw-model'
+            // default: 'nsfw-quantized'
+            // default: 'nsfw-quantized-mobilenet'
           }
         },
         required: ['model'],
