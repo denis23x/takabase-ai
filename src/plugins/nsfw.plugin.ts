@@ -3,13 +3,12 @@
 import fp from 'fastify-plugin';
 import { FastifyInstance, FastifyPluginAsync } from 'fastify';
 import * as nsfw from 'nsfwjs';
-import process from 'process';
 import path from 'path';
 
 const nsfwPlugin: FastifyPluginAsync = fp(async function (fastifyInstance: FastifyInstance) {
   fastifyInstance.decorate('nsfw', {
     getModel: (modelName: string): Promise<nsfw.NSFWJS> => {
-      const modelPath: string = 'file://' + path.join(process.cwd(), 'src/nsfw', modelName, 'model.json');
+      const modelPath: string = 'file://' + path.join(__dirname, '../nsfw', modelName, 'model.json');
       const modelOptions: any = {
         'gantman-inception-v3': {
           size: 299

@@ -66,7 +66,7 @@ main()
     process.exit(1);
   });
 
-export const api: HttpsFunction = onRequest(async (request: Request, response: express.Response) => {
+export const ai: HttpsFunction = onRequest(async (request: Request, response: express.Response) => {
   const fastifyInstance: FastifyInstance = await main();
 
   await fastifyInstance.ready();

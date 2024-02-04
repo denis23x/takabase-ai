@@ -7,7 +7,7 @@
         {
           "source": "**",
           "function": {
-            "functionId": "api",
+            "functionId": "ai",
             "region": "us-central1"
           }
         }
@@ -20,7 +20,7 @@
       "frameworksBackend": {
         "region": "us-central1",
         "maxInstances": 5,
-        "memory": "256MiB"
+        "memory": "512MiB"
       }
     }
   ],
