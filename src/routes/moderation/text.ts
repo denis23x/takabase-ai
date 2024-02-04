@@ -33,7 +33,7 @@ export default async function (fastify: FastifyInstance): Promise<void> {
           type: 'object',
           properties: {
             data: {
-              $ref: 'moderationSchema#'
+              $ref: 'moderationTextSchema#'
             },
             statusCode: {
               type: 'number'

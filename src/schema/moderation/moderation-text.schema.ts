@@ -1,7 +1,7 @@
 /** @format */
 
-export const moderationSchema: Record<string, any> = {
-  $id: 'moderationSchema',
+export const moderationTextSchema: Record<string, any> = {
+  $id: 'moderationTextSchema',
   type: 'object',
   properties: {
     id: {

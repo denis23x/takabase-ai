@@ -1,12 +1,11 @@
 /** @format */
 
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from 'fastify';
 import * as tfjs from '@tensorflow/tfjs-node';
 import * as nsfw from 'nsfwjs';
-import * as fs from 'fs';
-import path from 'path';
-import process from 'process';
 import { ModerationImageDto } from '../../types/dto/moderation/moderation-image';
+import { NSFWJS } from 'nsfwjs';
+import { Multipart } from '@fastify/multipart';
 
 export default async function (fastify: FastifyInstance): Promise<void> {
   fastify.route({
@@ -15,21 +14,21 @@ export default async function (fastify: FastifyInstance): Promise<void> {
     schema: {
       tags: ['Moderation'],
       description: 'Moderates an image',
+      consumes: ['multipart/form-data'],
       body: {
         type: 'object',
         properties: {
           model: {
             type: 'string',
-            // default: 'gantman-inception-v3'
-            // default: 'gantman-inception-v3-quantized'
-            default: 'gantman-mobilenet-v2'
-            // default: 'gantman-mobilenet-v2-quantized'
-            // default: 'nsfw-model'
-            // default: 'nsfw-quantized'
-            // default: 'nsfw-quantized-mobilenet'
+            default: 'gantman-mobilenet-v2-quantized'
+          },
+          input: {
+            type: 'string',
+            contentMediaType: 'image/png',
+            contentEncoding: 'binary'
           }
         },
-        required: ['model'],
+        required: ['model', 'input'],
         additionalProperties: false
       },
       response: {
@@ -37,18 +36,7 @@ export default async function (fastify: FastifyInstance): Promise<void> {
           type: 'object',
           properties: {
             data: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  className: {
-                    type: 'string'
-                  },
-                  probability: {
-                    type: 'number'
-                  }
-                }
-              }
+              $ref: 'moderationImageSchema#'
             },
             statusCode: {
               type: 'number'
@@ -63,39 +51,78 @@ export default async function (fastify: FastifyInstance): Promise<void> {
         }
       }
     },
+    // prettier-ignore
+    preValidation: (request: FastifyRequest<ModerationImageDto>, reply: FastifyReply, done: HookHandlerDoneFunction) => {
+      request.body = {
+        model: 'model',
+        input: 'input'
+      };
+
+      done();
+    },
     handler: async function (request: FastifyRequest<ModerationImageDto>, reply: FastifyReply): Promise<any> {
-      const { model } = request.body;
+      const parts: AsyncIterableIterator<Multipart> = request.parts();
 
-      fs.readFile(path.join(process.cwd(), 'src/nsfw/images', 'test-12.png'), 'base64', async (err, data) => {
-        if (err) {
-          console.log(err);
-        } else {
-          request.server.nsfw
-            .getModel(model)
-            .then((nsfwModel: nsfw.NSFWJS) => {
-              const tensorArray: Uint8Array = request.server.nsfw.getUint8Array(data);
-              const tensor: tfjs.Tensor3D | tfjs.Tensor4D = tfjs.node.decodeImage(tensorArray, 3);
+      let model: string = 'gantman-mobilenet-v2-quantized';
+      let buffer: Buffer = Buffer.from('');
 
-              nsfwModel
-                .classify(tensor as tfjs.Tensor3D)
-                .then((nsfwPredictions: nsfw.predictionType[]) => {
-                  console.log(nsfwPredictions);
+      for await (const part of parts) {
+        if (part.type === 'field') {
+          const models: string[] = [
+            'gantman-inception-v3',
+            'gantman-inception-v3-quantized',
+            'gantman-mobilenet-v2',
+            'gantman-mobilenet-v2-quantized',
+            'nsfw-model',
+            'nsfw-quantized',
+            'nsfw-quantized-mobilenet'
+          ];
 
-                  tensor.dispose();
-                })
-                .catch(() => {});
-            })
-            .catch((aaa: any) => {
-              console.log(aaa);
+          if (models.includes(part.value as string)) {
+            model = part.value as string;
+          } else {
+            return reply.status(400).send({
+              error: 'Bad Request',
+              message: 'Invalid model name',
+              statusCode: 400
             });
+          }
         }
-      });
 
-      return reply.status(500).send({
-        error: 'Internal Server Error',
-        message: 'Unable to moderate input image at this time',
-        statusCode: 500
-      });
+        if (part.type === 'file') {
+          const mimeTypes: string[] = ['image/jpeg', 'image/png'];
+
+          if (mimeTypes.includes(part.mimetype)) {
+            buffer = await part.toBuffer();
+          } else {
+            return reply.status(400).send({
+              error: 'Bad Request',
+              message: 'Invalid image type. Only PNG and JPG formats are supported',
+              statusCode: 400
+            });
+          }
+        }
+      }
+
+      const nsfwModel: NSFWJS = await request.server.nsfw.getModel(model);
+      const tensorArray: Uint8Array = new Uint8Array(buffer);
+      const tensor: tfjs.Tensor3D | tfjs.Tensor4D = tfjs.node.decodeImage(tensorArray, 3);
+
+      await nsfwModel
+        .classify(tensor as tfjs.Tensor3D)
+        .then((nsfwPredictions: nsfw.predictionType[]) => {
+          return reply.status(200).send({
+            data: nsfwPredictions,
+            statusCode: 200
+          });
+        })
+        .catch((error: any) => {
+          return reply.status(500).send({
+            error: 'Internal Server Error',
+            message: error.message,
+            statusCode: 500
+          });
+        });
     }
   });
 }

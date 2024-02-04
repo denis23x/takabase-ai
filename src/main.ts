@@ -8,6 +8,7 @@ import fastifyHelmet from '@fastify/helmet';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
 import fastifyRateLimit from '@fastify/rate-limit';
+import fastifyMultipart from '@fastify/multipart';
 
 import { envConfig } from './config/env.config';
 import { corsConfig } from './config/cors.config';
@@ -16,6 +17,7 @@ import { compressConfig } from './config/compress.config';
 import { helmetConfig } from './config/helmet.config';
 import { swaggerConfig } from './config/swagger.config';
 import { rateLimitConfig } from './config/rate-limit.config';
+import { multipartConfig } from './config/multipart.config';
 
 import nsfwPlugin from './plugins/nsfw.plugin';
 import openaiPlugin from './plugins/openai.plugin';
@@ -24,7 +26,8 @@ import moderationRoutes from './routes/moderation';
 
 import { responseErrorSchema } from './schema/crud/response/response-error.schema';
 
-import { moderationSchema } from './schema/moderation.schema';
+import { moderationImageSchema } from './schema/moderation/moderation-image.schema';
+import { moderationTextSchema } from './schema/moderation/moderation-text.schema';
 
 import { FastifyInstance } from 'fastify/types/instance';
 import { ContentTypeParserDoneFunction } from 'fastify/types/content-type-parser';
@@ -48,6 +51,7 @@ export const main = async (): Promise<FastifyInstance> => {
   await fastifyInstance.register(fastifyCompress, compressConfig);
   await fastifyInstance.register(fastifyHelmet, helmetConfig);
   await fastifyInstance.register(fastifyRateLimit, rateLimitConfig);
+  await fastifyInstance.register(fastifyMultipart, multipartConfig);
 
   await fastifyInstance.register(nsfwPlugin);
   await fastifyInstance.register(openaiPlugin);
@@ -58,7 +62,8 @@ export const main = async (): Promise<FastifyInstance> => {
 
   // JSON SCHEMA MODELS
 
-  fastifyInstance.addSchema(moderationSchema);
+  fastifyInstance.addSchema(moderationImageSchema);
+  fastifyInstance.addSchema(moderationTextSchema);
 
   // SWAGGER
 
