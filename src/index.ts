@@ -12,8 +12,8 @@ import { setGlobalOptions } from 'firebase-functions/v2';
 setGlobalOptions({
   region: 'us-central1',
   minInstances: 0,
-  maxInstances: 10,
-  memory: '256MiB'
+  maxInstances: 5,
+  memory: '512MiB'
 });
 
 const exitHandler = (app: FastifyInstance, exitCode: number): void => {
