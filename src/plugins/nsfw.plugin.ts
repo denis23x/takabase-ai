@@ -37,18 +37,6 @@ const nsfwPlugin: FastifyPluginAsync = fp(async function (fastifyInstance: Fasti
       };
 
       return nsfw.load(modelPath, modelOptions[modelName]);
-    },
-    getUint8Array: (base64: string): Uint8Array => {
-      const raw: string = atob(base64);
-      const rawLength: number = raw.length;
-
-      const uint8Array: Uint8Array = new Uint8Array(new ArrayBuffer(rawLength));
-
-      for (let i: number = 0; i < rawLength; i += 1) {
-        uint8Array[i] = raw.charCodeAt(i);
-      }
-
-      return uint8Array;
     }
   });
 });

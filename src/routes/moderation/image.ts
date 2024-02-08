@@ -66,24 +66,12 @@ export default async function (fastify: FastifyInstance): Promise<void> {
         headers: request.headers
       });
 
+      /** Busboy */
+
       const formFields: Record<string, any> = {};
 
       busboy.on('field', (fieldName: string, value: string): void => {
-        const models: string[] = [
-          'gantman-inception-v3',
-          'gantman-inception-v3-quantized',
-          'gantman-mobilenet-v2',
-          'gantman-mobilenet-v2-quantized',
-          'nsfw-model',
-          'nsfw-quantized',
-          'nsfw-quantized-mobilenet'
-        ];
-
-        if (models.includes(value)) {
-          formFields[fieldName] = value;
-        } else {
-          busboy.emit('error');
-        }
+        formFields[fieldName] = value;
       });
 
       const formFiles: Record<string, any> = {};
@@ -104,8 +92,48 @@ export default async function (fastify: FastifyInstance): Promise<void> {
 
       /** NSFW */
 
-      await new Promise((resolve, reject): void => {
+      await new Promise((): void => {
         busboy.on('finish', async (): Promise<void> => {
+          const modelList: string[] = [
+            'gantman-inception-v3',
+            'gantman-inception-v3-quantized',
+            'gantman-mobilenet-v2',
+            'gantman-mobilenet-v2-quantized',
+            'nsfw-model',
+            'nsfw-quantized',
+            'nsfw-quantized-mobilenet'
+          ];
+
+          if (!modelList.includes(formFields.model)) {
+            return reply.status(404).send({
+              error: 'Not Found',
+              message: 'AI model not found',
+              statusCode: 404
+            });
+          }
+
+          const mimeTypeList: string[] = ['image/jpg', 'image/jpeg', 'image/png'];
+
+          if (!mimeTypeList.includes(formFiles.input.fileMimeType)) {
+            return reply.status(400).send({
+              error: 'Bad Request',
+              message: 'Invalid MIME type',
+              statusCode: 400
+            });
+          }
+
+          const fileSize: number = 1048576 * 5;
+
+          if (formFiles.input.fileSize >= fileSize) {
+            return reply.status(400).send({
+              error: 'Bad Request',
+              message: 'Maximum file size exceeded',
+              statusCode: 400
+            });
+          }
+
+          /** TensorFlow */
+
           if (fastify.config.NODE_ENV === 'production') {
             tfjs.enableProdMode();
           }
@@ -115,20 +143,20 @@ export default async function (fastify: FastifyInstance): Promise<void> {
           const tensor: tfjs.Tensor3D | tfjs.Tensor4D = tfjs.node.decodeImage(tensorArray, 3);
 
           // prettier-ignore
-          return nsfwModel
+          await nsfwModel
             .classify(tensor as tfjs.Tensor3D)
             .then((nsfwPredictions: nsfw.predictionType[]) => {
-              resolve(reply.status(200).send({
+              return reply.status(200).send({
                 data: nsfwPredictions,
                 statusCode: 200
-              }))
+              });
             })
             .catch((error: any) => {
-              reject(reply.status(500).send({
+              return reply.status(500).send({
                 error: 'Internal Server Error',
                 message: error.message,
                 statusCode: 500
-              }));
+              });
             });
         });
 
