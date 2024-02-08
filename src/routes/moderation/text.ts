@@ -48,7 +48,7 @@ export default async function (fastify: FastifyInstance): Promise<void> {
         }
       }
     },
-    handler: async function (request: FastifyRequest<ModerationTextDto>, reply: FastifyReply): Promise<any> {
+    handler: async (request: FastifyRequest<ModerationTextDto>, reply: FastifyReply): Promise<any> => {
       const moderationCreateParams: any = {
         ...request.body
       };
