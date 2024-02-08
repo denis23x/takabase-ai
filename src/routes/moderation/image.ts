@@ -5,7 +5,10 @@ import * as tfjs from '@tensorflow/tfjs-node';
 import * as nsfw from 'nsfwjs';
 import { ModerationImageDto } from '../../types/dto/moderation/moderation-image';
 import { NSFWJS } from 'nsfwjs';
-import { Multipart } from '@fastify/multipart';
+import * as os from 'os';
+import path from 'path';
+import * as fs from 'fs';
+import Busboy from 'busboy';
 
 export default async function (fastify: FastifyInstance): Promise<void> {
   fastify.route({
@@ -53,6 +56,9 @@ export default async function (fastify: FastifyInstance): Promise<void> {
     },
     // prettier-ignore
     preValidation: (request: FastifyRequest<ModerationImageDto>, reply: FastifyReply, done: HookHandlerDoneFunction) => {
+
+      /** Swagger validation hack */
+
       request.body = {
         model: 'model',
         input: 'input'
@@ -61,52 +67,69 @@ export default async function (fastify: FastifyInstance): Promise<void> {
       done();
     },
     handler: async function (request: FastifyRequest<ModerationImageDto>, reply: FastifyReply): Promise<any> {
-      const parts: AsyncIterableIterator<Multipart> = request.parts();
+      const busboy: Busboy.Busboy = Busboy({ headers: request.headers });
+      const tmpdir: string = os.tmpdir();
 
-      let model: string = 'gantman-mobilenet-v2-quantized';
-      let buffer: Buffer = Buffer.from('');
+      const formFields: Record<string, any> = {};
+      const formFileUploads: Record<string, string> = {};
 
-      for await (const part of parts) {
-        if (part.type === 'field') {
-          const models: string[] = [
-            'gantman-inception-v3',
-            'gantman-inception-v3-quantized',
-            'gantman-mobilenet-v2',
-            'gantman-mobilenet-v2-quantized',
-            'nsfw-model',
-            'nsfw-quantized',
-            'nsfw-quantized-mobilenet'
-          ];
+      /** Grab form fields */
 
-          if (models.includes(part.value as string)) {
-            model = part.value as string;
-          } else {
-            return reply.status(400).send({
-              error: 'Bad Request',
-              message: 'Invalid model name',
-              statusCode: 400
-            });
-          }
+      busboy.on('field', (fieldName: string, value: string): void => {
+        formFields[fieldName] = value;
+      });
+
+      /** Grab form files */
+
+      let fileData: any = null;
+      const fileWrites: any[] = [];
+
+      // @ts-ignore
+      busboy.on('file', (fieldName: string, file: any, { filename }): void => {
+        const filePath: string = path.join(tmpdir, filename);
+
+        formFileUploads[fieldName] = filePath;
+
+        const writeStream: fs.WriteStream = fs.createWriteStream(filePath);
+
+        file.pipe(writeStream);
+
+        const promise: Promise<void> = new Promise((resolve, reject) => {
+          file.on('data', (data: any) => {
+            fileData = fileData === null ? data : Buffer.concat([fileData, data]);
+          });
+
+          file.on('end', () => {
+            writeStream.end();
+          });
+
+          writeStream.on('close', resolve);
+          writeStream.on('error', reject);
+        });
+
+        fileWrites.push(promise);
+      });
+
+      /** Free memory */
+
+      busboy.on('finish', async () => {
+        await Promise.all(fileWrites);
+
+        for (const file in formFileUploads) {
+          fs.unlinkSync(formFileUploads[file]);
         }
+      });
 
-        if (part.type === 'file') {
-          const mimeTypes: string[] = ['image/jpeg', 'image/png'];
+      // @ts-ignore
+      busboy.end(request.raw.body);
 
-          if (mimeTypes.includes(part.mimetype)) {
-            buffer = await part.toBuffer();
-          } else {
-            return reply.status(400).send({
-              error: 'Bad Request',
-              message: 'Invalid image type. Only PNG and JPG formats are supported',
-              statusCode: 400
-            });
-          }
-        }
-      }
+      /** NSFW */
 
-      const nsfwModel: NSFWJS = await request.server.nsfw.getModel(model);
-      const tensorArray: Uint8Array = new Uint8Array(buffer);
+      const nsfwModel: NSFWJS = await request.server.nsfw.getModel(formFields.model);
+      const tensorArray: Uint8Array = new Uint8Array(fileData);
       const tensor: tfjs.Tensor3D | tfjs.Tensor4D = tfjs.node.decodeImage(tensorArray, 3);
+
+      // tfjs.enableProdMode();
 
       await nsfwModel
         .classify(tensor as tfjs.Tensor3D)

@@ -13,6 +13,7 @@
     "start:dev": "nodemon src/index.ts",
     "start:deploy": "firebase use draft-ssr && firebase deploy --only functions:ai,hosting",
     "start:debug": "nodemon --inspect=0.0.0.0:9229 src/index.ts",
+    "start:functions": "npm run build:prod && npx @google-cloud/functions-framework --target=ai",
     "build:prod": "tsc -p tsconfig.json && mkdir -p dist/nsfw && cp -R src/nsfw dist"
   },
   "keywords": [
@@ -33,6 +34,7 @@
     "@fastify/swagger": "^8.3.1",
     "@fastify/swagger-ui": "^2.1.0",
     "@tensorflow/tfjs-node": "^4.17.0",
+    "busboy": "^1.6.0",
     "dotenv": "^16.0.3",
     "fastify": "^4.15.0",
     "firebase-admin": "^11.8.0",
@@ -41,6 +43,7 @@
     "openai": "^4.26.0"
   },
   "devDependencies": {
+    "@types/busboy": "^1.5.3",
     "@types/node": "^18.16.1",
     "@typescript-eslint/eslint-plugin": "^6.7.2",
     "@typescript-eslint/parser": "^6.7.2",
