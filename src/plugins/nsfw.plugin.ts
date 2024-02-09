@@ -1,42 +1,79 @@
 /** @format */
 
 import fp from 'fastify-plugin';
-import { FastifyInstance, FastifyPluginAsync } from 'fastify';
+import { FastifyInstance, FastifyPluginAsync, FastifyReply } from 'fastify';
 import * as nsfw from 'nsfwjs';
 import path from 'path';
 
+const nsfwModelOptions: Record<string, any> = {
+  'gantman-inception-v3': {
+    size: 299
+  },
+  'gantman-inception-v3-quantized': {
+    size: 299
+  },
+  'gantman-mobilenet-v2': {
+    type: 'graph',
+    size: 224
+  },
+  'gantman-mobilenet-v2-quantized': {
+    type: 'graph',
+    size: 224
+  },
+  'nsfw-model': {
+    size: 299
+  },
+  'nsfw-quantized': {
+    type: 'graph',
+    size: 224
+  },
+  'nsfw-quantized-mobilenet': {
+    size: 224
+  }
+};
+
 const nsfwPlugin: FastifyPluginAsync = fp(async function (fastifyInstance: FastifyInstance) {
   fastifyInstance.decorate('nsfw', {
+    // prettier-ignore
     getModel: (modelName: string): Promise<nsfw.NSFWJS> => {
-      const modelPath: string = 'file://' + path.join(__dirname, '../nsfw', modelName, 'model.json');
-      const modelOptions: any = {
-        'gantman-inception-v3': {
-          size: 299
-        },
-        'gantman-inception-v3-quantized': {
-          size: 299
-        },
-        'gantman-mobilenet-v2': {
-          type: 'graph',
-          size: 224
-        },
-        'gantman-mobilenet-v2-quantized': {
-          type: 'graph',
-          size: 224
-        },
-        'nsfw-model': {
-          size: 299
-        },
-        'nsfw-quantized': {
-          type: 'graph',
-          size: 224
-        },
-        'nsfw-quantized-mobilenet': {
-          size: 224
-        }
-      };
+      return nsfw.load('file://' + path.join(__dirname, '../nsfw', modelName, 'model.json'), nsfwModelOptions[modelName]);
+    },
+    getModelValidation: (reply: FastifyReply, modelName: string): FastifyReply | null => {
+      if (!Object.keys(nsfwModelOptions).includes(modelName)) {
+        return reply.status(404).send({
+          error: 'Not Found',
+          message: 'Model not found',
+          statusCode: 404
+        });
+      }
 
-      return nsfw.load(modelPath, modelOptions[modelName]);
+      return null;
+    },
+    getFileSizeValidation: (reply: FastifyReply, size: number): FastifyReply | null => {
+      const sizeMax: number = 1048576 * 5;
+
+      if (size >= sizeMax) {
+        return reply.status(400).send({
+          error: 'Bad Request',
+          message: 'Maximum file size exceeded',
+          statusCode: 400
+        });
+      }
+
+      return null;
+    },
+    getMimeTypeValidation: (reply: FastifyReply, mimeType: string): FastifyReply | null => {
+      const mimeTypeList: string[] = ['image/jpg', 'image/jpeg', 'image/png'];
+
+      if (!mimeTypeList.includes(mimeType)) {
+        return reply.status(400).send({
+          error: 'Bad Request',
+          message: 'Invalid MIME type',
+          statusCode: 400
+        });
+      }
+
+      return null;
     }
   });
 });

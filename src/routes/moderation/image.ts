@@ -78,15 +78,15 @@ export default async function (fastify: FastifyInstance): Promise<void> {
 
       busboy.on('file', (fieldName: string, file: any, fileInfo: Busboy.FileInfo): void => {
         formFiles[fieldName] = {
-          fileMimeType: fileInfo.mimeType,
+          mimeType: fileInfo.mimeType,
           file: null,
-          fileSize: 0
+          size: 0
         };
 
         // prettier-ignore
         file.on('data', (chunk: any[]): void => {
           formFiles[fieldName].file = formFiles[fieldName].file === null ? chunk : Buffer.concat([formFiles[fieldName].file, chunk]);
-          formFiles[fieldName].fileSize = formFiles[fieldName].fileSize + chunk.length;
+          formFiles[fieldName].size = formFiles[fieldName].size + chunk.length;
         });
       });
 
@@ -94,42 +94,20 @@ export default async function (fastify: FastifyInstance): Promise<void> {
 
       await new Promise((): void => {
         busboy.on('finish', async (): Promise<void> => {
-          const modelList: string[] = [
-            'gantman-inception-v3',
-            'gantman-inception-v3-quantized',
-            'gantman-mobilenet-v2',
-            'gantman-mobilenet-v2-quantized',
-            'nsfw-model',
-            'nsfw-quantized',
-            'nsfw-quantized-mobilenet'
-          ];
+          const validationPayload = (): any[] => {
+            return [
+              request.server.nsfw.getModelValidation(reply, formFields.model),
+              request.server.nsfw.getFileSizeValidation(reply, formFiles.input.size),
+              request.server.nsfw.getMimeTypeValidation(reply, formFiles.input.mimeType)
+            ].filter((validation: FastifyReply | null) => validation !== null);
+          };
 
-          if (!modelList.includes(formFields.model)) {
-            return reply.status(404).send({
-              error: 'Not Found',
-              message: 'AI model not found',
-              statusCode: 404
-            });
-          }
+          const validation: FastifyReply[] = validationPayload();
 
-          const mimeTypeList: string[] = ['image/jpg', 'image/jpeg', 'image/png'];
+          /** Throw out the first (any) error */
 
-          if (!mimeTypeList.includes(formFiles.input.fileMimeType)) {
-            return reply.status(400).send({
-              error: 'Bad Request',
-              message: 'Invalid MIME type',
-              statusCode: 400
-            });
-          }
-
-          const fileSize: number = 1048576 * 5;
-
-          if (formFiles.input.fileSize >= fileSize) {
-            return reply.status(400).send({
-              error: 'Bad Request',
-              message: 'Maximum file size exceeded',
-              statusCode: 400
-            });
+          if (validation.length) {
+            return validation[0];
           }
 
           /** TensorFlow */
