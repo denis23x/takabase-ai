@@ -68,21 +68,17 @@ export const main = async (): Promise<FastifyInstance> => {
 
   // GCP ISSUE
 
-  // prettier-ignore
-  if (!fastifyInstance.hasContentTypeParser('application/json')) {
-    fastifyInstance.addContentTypeParser('application/json', (request: FastifyRequest, body: any, done: ContentTypeParserDoneFunction): void => {
-      done(null, body.body);
-    });
-  }
-
-  // MULTIPART/FORM-DATA
+  fastifyInstance.removeAllContentTypeParsers();
 
   // prettier-ignore
-  if (!fastifyInstance.hasContentTypeParser('multipart/form-data')) {
-    fastifyInstance.addContentTypeParser('multipart/form-data', (request: FastifyRequest, payload: any, done: ContentTypeParserDoneFunction): void => {
-      done(null);
-    });
-  }
+  fastifyInstance.addContentTypeParser('application/json', (request: FastifyRequest, body: any, done: ContentTypeParserDoneFunction): void => {
+    done(null, body.body);
+  });
+
+  // prettier-ignore
+  fastifyInstance.addContentTypeParser('multipart/form-data', (request: FastifyRequest, payload: any, done: ContentTypeParserDoneFunction): void => {
+    done(null);
+  });
 
   // API
 
