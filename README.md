@@ -13,7 +13,7 @@ Setup
 Processes
 
 - `start:dev` local dev server http://localhost:4410
-- `start:deploy` deploy to dev server https://draft-ai.web.app
+- `start:deploy` deploy
 - `start:debug` local dev server with code inspection enabled for debugging
 
 Builds
