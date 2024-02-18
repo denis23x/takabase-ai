@@ -8,12 +8,16 @@ dotenv.config();
 // https://github.com/fastify/fastify-rate-limit
 
 const rateLimitConfigList: Record<string, FastifyRateLimitOptions> = {
-  development: {
+  localhost: {
     max: 1000,
     timeWindow: '1 minute'
   },
+  development: {
+    max: 500,
+    timeWindow: '1 minute'
+  },
   production: {
-    max: 1000,
+    max: 500,
     timeWindow: '1 minute'
   }
 };

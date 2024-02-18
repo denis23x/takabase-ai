@@ -3,7 +3,7 @@
 declare module 'fastify' {
   interface FastifyInstance {
     config: {
-      NODE_ENV: 'development' | 'production';
+      NODE_ENV: string;
       APP_PORT: number;
       APP_HOST: string;
       ENABLE_SWAGGER: boolean;

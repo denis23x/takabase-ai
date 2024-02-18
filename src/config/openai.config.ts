@@ -8,6 +8,9 @@ dotenv.config();
 // https://github.com/openai/openai-node
 
 const openaiConfigList: Record<string, ClientOptions> = {
+  localhost: {
+    apiKey: String(process.env.OPENAI_API_KEY)
+  },
   development: {
     apiKey: String(process.env.OPENAI_API_KEY)
   },

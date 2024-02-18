@@ -6,7 +6,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 const loggerConfigList: Record<string, PinoLoggerOptions | boolean> = {
-  development: {
+  localhost: {
     level: 'debug',
     transport: {
       target: 'pino-pretty',
@@ -17,6 +17,7 @@ const loggerConfigList: Record<string, PinoLoggerOptions | boolean> = {
       }
     }
   },
+  development: true,
   production: true
 };
 

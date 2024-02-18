@@ -1,6 +1,4 @@
-# Draft AI
-
----
+# Takabase AI
 
 ## Development commands
 
@@ -24,7 +22,5 @@ Some configurations
 
 - `.env.example` app .env (also `src/config/env.config.ts`)
 - `firebase.json` dev deploy config
-
----
 
 Contact https://t.me/denis23x

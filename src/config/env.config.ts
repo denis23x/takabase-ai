@@ -12,7 +12,7 @@ export const envConfig: FastifyEnvOptions = {
     properties: {
       NODE_ENV: {
         type: 'string',
-        default: 'development'
+        default: 'localhost'
       },
       APP_PORT: {
         type: 'number',
