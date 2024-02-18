@@ -3,18 +3,10 @@
 import { main } from './main';
 import { FastifyInstance } from 'fastify';
 import { FastifyListenOptions } from 'fastify/types/instance';
-import { HttpsFunction, onRequest, Request } from 'firebase-functions/v2/https';
+import { HttpsFunction, HttpsOptions, onRequest, Request } from 'firebase-functions/v2/https';
 import * as express from 'express';
-import { setGlobalOptions } from 'firebase-functions/v2';
 
-// FIREBASE
-
-setGlobalOptions({
-  region: 'us-central1',
-  minInstances: 0,
-  maxInstances: 5,
-  memory: '512MiB'
-});
+/** FASTIFY */
 
 const exitHandler = (app: FastifyInstance, exitCode: number): void => {
   app.close(() => {
@@ -66,7 +58,16 @@ main()
     process.exit(1);
   });
 
-export const ai: HttpsFunction = onRequest(async (request: Request, response: express.Response) => {
+/** FIREBASE */
+
+export const apiHttpsOptions: HttpsOptions = {
+  region: 'us-central1',
+  minInstances: 0,
+  maxInstances: 4,
+  memory: '512MiB'
+};
+
+export const ai: HttpsFunction = onRequest(apiHttpsOptions, async (request: Request, response: express.Response) => {
   const fastifyInstance: FastifyInstance = await main();
 
   await fastifyInstance.ready();

@@ -19,7 +19,7 @@ export default async function (fastify: FastifyInstance): Promise<void> {
         properties: {
           model: {
             type: 'string',
-            default: 'gantman-mobilenet-v2-quantized'
+            default: 'gantman-mobilenet-v2'
           },
           input: {
             type: 'string',
