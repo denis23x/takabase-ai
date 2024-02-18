@@ -1,6 +1,6 @@
 {
-  "name": "draft-ai",
-  "version": "0.0.1",
+  "name": "takabase-ai",
+  "version": "1.0.0",
   "description": "Node backend project",
   "author": "Denis Iakimenko",
   "private": true,
