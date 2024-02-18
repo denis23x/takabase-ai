@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start:dev": "nodemon src/index.ts",
-    "start:deploy": "firebase use draft-ssr && firebase deploy --only functions:ai,hosting",
+    "start:deploy": "read alias && firebase use $alias && firebase deploy --only functions:ai,hosting:$alias-ai",
     "start:debug": "nodemon --inspect=0.0.0.0:9229 src/index.ts",
     "start:functions": "npm run build:prod && npx @google-cloud/functions-framework --target=ai",
     "build:prod": "tsc -p tsconfig.json && mkdir -p dist/nsfw && cp -R src/nsfw dist"

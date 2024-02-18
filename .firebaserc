@@ -1,14 +1,22 @@
 {
   "projects": {
-    "default": "draft-ssr"
+    "default": "takabase-dev"
   },
   "targets": {
-    "draft-ssr": {
+    "takabase-dev": {
       "hosting": {
-        "draft-ai": [
-          "draft-ai"
+        "takabase-dev-ai": [
+          "takabase-dev-ai"
+        ]
+      }
+    },
+    "takabase-prod": {
+      "hosting": {
+        "takabase-prod-ai": [
+          "takabase-prod-ai"
         ]
       }
     }
-  }
+  },
+  "etags": {}
 }
