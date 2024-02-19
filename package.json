@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start:dev": "nodemon src/index.ts",
-    "start:deploy": "read alias && firebase use $alias && firebase deploy --only functions:ai,hosting:$alias-ai",
+    "start:deploy": "node firebase-deploy.js",
     "start:debug": "nodemon --inspect=0.0.0.0:9229 src/index.ts",
     "start:functions": "npm run build:prod && npx @google-cloud/functions-framework --target=ai",
     "build:prod": "tsc -p tsconfig.json && mkdir -p dist/nsfw && cp -R src/nsfw dist"
@@ -55,6 +55,7 @@
     "npm-check-updates": "^16.14.5",
     "pino-pretty": "^10.0.0",
     "prettier": "^3.0.3",
+    "prompts": "^2.4.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.3"
   }
