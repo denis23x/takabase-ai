@@ -17,8 +17,12 @@ const loggerConfigList: Record<string, PinoLoggerOptions | boolean> = {
       }
     }
   },
-  development: true,
-  production: true
+  development: {
+    level: 'error'
+  },
+  production: {
+    level: 'error'
+  }
 };
 
 export const loggerConfig: PinoLoggerOptions | boolean = loggerConfigList[String(process.env.NODE_ENV)];
