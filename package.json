@@ -9,10 +9,12 @@
   "engines": {
     "node": "18"
   },
+  "watch": {
+    "start:functions": "*.ts"
+  },
   "scripts": {
-    "start:dev": "nodemon src/index.ts",
+    "start:dev": "npm-watch start:functions",
     "start:deploy": "node firebase-deploy.js",
-    "start:debug": "nodemon --inspect=0.0.0.0:9229 src/index.ts",
     "start:functions": "npm run build:prod && npx @google-cloud/functions-framework --target=ai",
     "build:prod": "tsc -p tsconfig.json && mkdir -p dist/nsfw && cp -R src/nsfw dist"
   },
@@ -53,8 +55,8 @@
     "eslint-plugin-prettier": "^5.0.0",
     "fastify-tsconfig": "^2.0.0",
     "firebase-functions-test": "^3.1.1",
-    "nodemon": "^3.0.1",
     "npm-check-updates": "^16.14.5",
+    "npm-watch": "^0.11.0",
     "pino-pretty": "^10.0.0",
     "prettier": "^3.0.3",
     "prompts": "^2.4.2",

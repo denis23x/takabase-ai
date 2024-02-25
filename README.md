@@ -7,12 +7,12 @@ Setup
 - `npm install`
 - Setup **Prettier**
 - Setup **ESLint**
+- Setup [husky](https://github.com/typicode/husky)
 
 Processes
 
-- `start:dev` local dev server http://localhost:4410
+- `start:dev` local dev server http://localhost:8080
 - `start:deploy` deploy
-- `start:debug` local dev server with code inspection enabled for debugging
 
 Builds
 
