@@ -96,9 +96,9 @@ export default async function (fastify: FastifyInstance): Promise<void> {
         busboy.on('finish', async (): Promise<void> => {
           const validationPayload = (): any[] => {
             return [
-              request.server.nsfw.getModelValidation(reply, formFields.model),
-              request.server.nsfw.getFileSizeValidation(reply, formFiles.input.size),
-              request.server.nsfw.getMimeTypeValidation(reply, formFiles.input.mimeType)
+              request.server.nsfw.getValidationModel(reply, formFields.model),
+              request.server.nsfw.getValidationFileSize(reply, formFiles.input.size),
+              request.server.nsfw.getValidationMimeType(reply, formFiles.input.mimeType)
             ].filter((validation: FastifyReply | null) => validation !== null);
           };
 

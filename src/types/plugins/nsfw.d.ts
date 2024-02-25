@@ -6,9 +6,9 @@ declare module 'fastify' {
   interface FastifyInstance {
     nsfw: {
       getModel: (modelName: string) => Promise<nsfw.NSFWJS>;
-      getModelValidation: (reply: FastifyReply, modelName: string) => FastifyReply | null;
-      getFileSizeValidation: (reply: FastifyReply, size: number) => FastifyReply | null;
-      getMimeTypeValidation: (reply: FastifyReply, mimeType: string) => FastifyReply | null;
+      getValidationModel: (reply: FastifyReply, modelName: string) => FastifyReply | null;
+      getValidationFileSize: (reply: FastifyReply, size: number) => FastifyReply | null;
+      getValidationMimeType: (reply: FastifyReply, mimeType: string) => FastifyReply | null;
     };
   }
 }

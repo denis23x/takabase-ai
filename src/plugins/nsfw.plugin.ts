@@ -22,7 +22,7 @@ const nsfwPlugin: FastifyPluginAsync = fp(async function (fastifyInstance: Fasti
     getModel: (modelName: string): Promise<nsfw.NSFWJS> => {
       return nsfw.load('file://' + path.join(__dirname, '../nsfw', modelName, 'model.json'), nsfwModelOptions[modelName]);
     },
-    getModelValidation: (reply: FastifyReply, modelName: string): FastifyReply | null => {
+    getValidationModel: (reply: FastifyReply, modelName: string): FastifyReply | null => {
       if (!Object.keys(nsfwModelOptions).includes(modelName)) {
         return reply.status(404).send({
           error: 'Not Found',
@@ -33,7 +33,7 @@ const nsfwPlugin: FastifyPluginAsync = fp(async function (fastifyInstance: Fasti
 
       return null;
     },
-    getFileSizeValidation: (reply: FastifyReply, size: number): FastifyReply | null => {
+    getValidationFileSize: (reply: FastifyReply, size: number): FastifyReply | null => {
       const sizeMax: number = 1048576 * 5;
 
       if (size >= sizeMax) {
@@ -46,7 +46,7 @@ const nsfwPlugin: FastifyPluginAsync = fp(async function (fastifyInstance: Fasti
 
       return null;
     },
-    getMimeTypeValidation: (reply: FastifyReply, mimeType: string): FastifyReply | null => {
+    getValidationMimeType: (reply: FastifyReply, mimeType: string): FastifyReply | null => {
       const mimeTypeList: string[] = ['image/jpg', 'image/jpeg', 'image/png'];
 
       if (!mimeTypeList.includes(mimeType)) {
