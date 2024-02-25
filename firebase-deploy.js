@@ -25,7 +25,7 @@ const spawn = require('child_process').spawn;
     type: 'confirm',
     name: 'value',
     message: 'Can you confirm?',
-    initial: select.value === 'takabase-dev'
+    initial: select.value !== 'takabase-prod'
   });
 
   if (select.value && confirm.value) {
