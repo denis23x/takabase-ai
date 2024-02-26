@@ -19,6 +19,24 @@
       ]
     },
     {
+      "target": "takabase-local-ai",
+      "public": "dist",
+      "rewrites": [
+        {
+          "source": "**",
+          "function": {
+            "functionId": "ai",
+            "region": "us-central1"
+          }
+        }
+      ],
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
+    },
+    {
       "target": "takabase-prod-ai",
       "public": "dist",
       "rewrites": [

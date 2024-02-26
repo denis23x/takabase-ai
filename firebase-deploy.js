@@ -13,6 +13,11 @@ const spawn = require('child_process').spawn;
         description: 'https://takabase-dev-ai.web.app',
       },
       {
+        title: 'takabase-local',
+        value: 'takabase-local',
+        description: 'https://takabase-local-ai.web.app',
+      },
+      {
         title: 'takabase-prod',
         value: 'takabase-prod',
         description: 'https://takabase-prod-ai.web.app',

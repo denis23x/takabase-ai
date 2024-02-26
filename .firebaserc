@@ -10,6 +10,13 @@
         ]
       }
     },
+    "takabase-local": {
+      "hosting": {
+        "takabase-local-ai": [
+          "takabase-local-ai"
+        ]
+      }
+    },
     "takabase-prod": {
       "hosting": {
         "takabase-prod-ai": [

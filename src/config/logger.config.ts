@@ -7,15 +7,7 @@ dotenv.config();
 
 const loggerConfigList: Record<string, PinoLoggerOptions | boolean> = {
   localhost: {
-    level: 'debug',
-    transport: {
-      target: 'pino-pretty',
-      options: {
-        ignore: 'pid,hostname',
-        colorize: true,
-        colorizeObjects: true
-      }
-    }
+    level: 'debug'
   },
   development: {
     level: 'error'
