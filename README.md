@@ -11,7 +11,7 @@ Setup
 
 Processes
 
-- `start:dev` local dev server http://localhost:8080
+- `start:dev` swagger http://0.0.0.0:8080/docs
 - `start:deploy` deploy
 
 Builds

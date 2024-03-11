@@ -4,9 +4,20 @@ import { FastifyHelmetOptions } from '@fastify/helmet';
 
 // https://github.com/fastify/fastify-helmet
 
-export const helmetConfig: FastifyHelmetOptions = {
-  global: true,
-  crossOriginResourcePolicy: {
-    policy: 'cross-origin'
+const helmetConfigList: Record<string, FastifyHelmetOptions> = {
+  localhost: {
+    global: true,
+    crossOriginResourcePolicy: {
+      policy: 'cross-origin'
+    },
+    contentSecurityPolicy: false
+  },
+  development: {
+    global: true
+  },
+  production: {
+    global: true
   }
 };
+
+export const helmetConfig: FastifyHelmetOptions = helmetConfigList[String(process.env.NODE_ENV)];

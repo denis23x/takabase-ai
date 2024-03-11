@@ -22,10 +22,6 @@ export const envConfig: FastifyEnvOptions = {
         type: 'string',
         default: 'localhost'
       },
-      ENABLE_SWAGGER: {
-        type: 'boolean',
-        default: false
-      },
       OPENAI_API_KEY: {
         type: 'string',
         default: 'key'
