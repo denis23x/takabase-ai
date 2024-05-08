@@ -39,8 +39,8 @@ main()
     });
 
     const options: FastifyListenOptions = {
-      port: Number(fastifyInstance.config.APP_PORT),
-      host: String(fastifyInstance.config.APP_HOST)
+      port: Number(process.env.APP_PORT),
+      host: String(process.env.APP_HOST)
     };
 
     // PROCESS

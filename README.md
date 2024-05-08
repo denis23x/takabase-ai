@@ -20,7 +20,7 @@ Builds
 
 Some configurations
 
-- `.env.example` app .env (also `src/config/env.config.ts`)
+- `.env.example` app `.env.takabase-local`
 - `firebase.json` dev deploy config
 
 Contact https://t.me/denis23x

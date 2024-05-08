@@ -1,9 +1,12 @@
 /** @format */
 
 import { FastifyCorsOptions } from '@fastify/cors';
-import * as dotenv from 'dotenv';
+import { config } from 'dotenv';
 
-dotenv.config();
+config({
+  path: '.env.takabase-local',
+  override: false
+});
 
 // https://github.com/fastify/fastify-cors
 
