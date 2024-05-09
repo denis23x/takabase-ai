@@ -112,7 +112,7 @@ export default async function (fastify: FastifyInstance): Promise<void> {
 
           /** TensorFlow */
 
-          if (process.env.NODE_ENV !== 'localhost') {
+          if (process.env.APP_NODE_ENV !== 'localhost') {
             tfjs.enableProdMode();
           }
 

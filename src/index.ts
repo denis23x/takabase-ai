@@ -39,8 +39,8 @@ main()
     });
 
     const options: FastifyListenOptions = {
-      port: Number(process.env.APP_PORT),
-      host: String(process.env.APP_HOST)
+      port: 4400,
+      host: 'localhost'
     };
 
     // PROCESS
@@ -64,7 +64,10 @@ export const apiHttpsOptions: HttpsOptions = {
   region: 'us-central1',
   minInstances: 0,
   maxInstances: 4,
-  memory: '512MiB'
+  memory: '512MiB',
+  secrets: [
+    'AI_OPENAI_API_KEY',
+  ]
 };
 
 export const ai: HttpsFunction = onRequest(apiHttpsOptions, async (request: Request, response: express.Response) => {

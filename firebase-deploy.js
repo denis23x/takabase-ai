@@ -1,15 +1,12 @@
 const prompts = require('prompts');
 const spawn = require('child_process').spawn;
-const config = require('dotenv').config;
-
-config({
-  path: '.env.takabase-local',
-  override: false
-});
 
 const projectList = {
   ['takabase-dev']: {
     url: 'https://takabase-dev-api.web.app'
+  },
+  ['takabase-local']: {
+    url: 'https://takabase-local-api.web.app'
   },
   ['takabase-prod']: {
     url: 'https://takabase-prod-api.web.app'
@@ -21,23 +18,13 @@ const projectList = {
     type: 'select',
     name: 'project',
     message: 'Select a environment',
-    choices: [
-      {
-        title: 'takabase-dev',
-        value: 'takabase-dev',
-        description: 'https://takabase-dev-ai.web.app',
-      },
-      {
-        title: 'takabase-local',
-        value: 'takabase-local',
-        description: 'https://takabase-local-ai.web.app',
-      },
-      {
-        title: 'takabase-prod',
-        value: 'takabase-prod',
-        description: 'https://takabase-prod-ai.web.app',
-      },
-    ],
+    choices: Object.keys(projectList).map((key ) => {
+      return {
+        title: key,
+        value: key,
+        description: projectList[key].url,
+      }
+    }),
     initial: 0
   });
 

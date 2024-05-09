@@ -20,4 +20,4 @@ const helmetConfigList: Record<string, FastifyHelmetOptions> = {
   }
 };
 
-export const helmetConfig: FastifyHelmetOptions = helmetConfigList[String(process.env.NODE_ENV)];
+export const helmetConfig: FastifyHelmetOptions = helmetConfigList[String(process.env.APP_NODE_ENV)];

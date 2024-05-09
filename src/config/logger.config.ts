@@ -49,14 +49,7 @@ const loggerConfigBase: PinoLoggerOptions = {
 const loggerConfigList: Record<string, PinoLoggerOptions | boolean> = {
   localhost: {
     level: 'debug',
-    ...loggerConfigBase,
-    transport: {
-      target: 'pino-pretty',
-      options: {
-        colorize: true,
-        colorizeObjects: true
-      }
-    }
+    ...loggerConfigBase
   },
   development: {
     level: 'info',
@@ -68,4 +61,4 @@ const loggerConfigList: Record<string, PinoLoggerOptions | boolean> = {
   }
 };
 
-export const loggerConfig: PinoLoggerOptions | boolean = loggerConfigList[String(process.env.NODE_ENV)];
+export const loggerConfig: PinoLoggerOptions | boolean = loggerConfigList[String(process.env.APP_NODE_ENV)];

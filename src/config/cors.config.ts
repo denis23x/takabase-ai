@@ -36,4 +36,4 @@ const corsConfigList: Record<string, FastifyCorsOptions> = {
   }
 };
 
-export const corsConfig: FastifyCorsOptions = corsConfigList[String(process.env.NODE_ENV)];
+export const corsConfig: FastifyCorsOptions = corsConfigList[String(process.env.APP_NODE_ENV)];

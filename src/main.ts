@@ -63,7 +63,7 @@ export const main = async (): Promise<FastifyInstance> => {
 
   // LOCALHOST
 
-  if (process.env.NODE_ENV === 'localhost') {
+  if (process.env.APP_NODE_ENV === 'localhost') {
     await fastifyInstance.register(fastifySwagger, swaggerConfig);
     await fastifyInstance.register(fastifySwaggerUi, {
       routePrefix: '/docs'

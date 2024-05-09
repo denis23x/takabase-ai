@@ -22,4 +22,4 @@ const openaiConfigList: Record<string, ClientOptions> = {
   }
 };
 
-export const openaiConfig: ClientOptions = openaiConfigList[String(process.env.NODE_ENV)];
+export const openaiConfig: ClientOptions = openaiConfigList[String(process.env.APP_NODE_ENV)];

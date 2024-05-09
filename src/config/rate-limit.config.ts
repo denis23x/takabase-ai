@@ -25,4 +25,4 @@ const rateLimitConfigList: Record<string, FastifyRateLimitOptions> = {
   }
 };
 
-export const rateLimitConfig: FastifyRateLimitOptions = rateLimitConfigList[String(process.env.NODE_ENV)];
+export const rateLimitConfig: FastifyRateLimitOptions = rateLimitConfigList[String(process.env.APP_NODE_ENV)];
