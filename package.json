@@ -15,7 +15,7 @@
   "scripts": {
     "start:dev": "npm-watch start:functions",
     "start:deploy": "node firebase-deploy.js",
-    "start:functions": "npm run build:prod && npx @google-cloud/functions-framework --target=ai",
+    "start:functions": "npm run build:prod && npx @google-cloud/functions-framework --target=ai --port=8090",
     "build:prod": "tsc -p tsconfig.json && mkdir -p dist/nsfw && cp -R src/nsfw dist"
   },
   "keywords": [

@@ -38,6 +38,7 @@ main()
       });
     });
 
+    // DEFAULT
     const options: FastifyListenOptions = {
       port: 4400,
       host: 'localhost'
@@ -60,13 +61,15 @@ main()
 
 /** FIREBASE */
 
+// prettier-ignore
 export const apiHttpsOptions: HttpsOptions = {
   region: 'us-central1',
   minInstances: 0,
   maxInstances: 4,
   memory: '512MiB',
   secrets: [
-    'AI_OPENAI_API_KEY',
+    'APP_NODE_ENV',
+    'AI_OPENAI_API_KEY'
   ]
 };
 
