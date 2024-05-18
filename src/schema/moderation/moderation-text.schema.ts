@@ -1,5 +1,6 @@
 /** @format */
 
+// prettier-ignore
 export const moderationTextSchema: Record<string, any> = {
   $id: 'moderationTextSchema',
   type: 'object',
@@ -18,7 +19,6 @@ export const moderationTextSchema: Record<string, any> = {
           flagged: {
             type: 'boolean'
           },
-          // prettier-ignore
           categories: {
             type: 'object',
             properties: {
