@@ -16,7 +16,7 @@
     "start:dev": "npm-watch start:functions",
     "start:deploy": "node firebase-deploy.js",
     "start:functions": "npm run build:prod && npx @google-cloud/functions-framework --target=ai --port=8090",
-    "build:prod": "tsc -p tsconfig.json && mkdir -p dist/nsfw && cp -R src/nsfw dist"
+    "build:prod": "tsc -p tsconfig.json && mkdir -p dist/nsfw && cp -R src/nsfw dist && cp src/index.html dist"
   },
   "keywords": [
     "node",
@@ -29,8 +29,10 @@
   "dependencies": {
     "@fastify/compress": "^7.0.3",
     "@fastify/cors": "^9.0.1",
+    "@fastify/etag": "^5.2.0",
     "@fastify/helmet": "^11.1.1",
     "@fastify/rate-limit": "^9.1.0",
+    "@fastify/static": "^7.0.4",
     "@fastify/swagger": "^8.14.0",
     "@fastify/swagger-ui": "^3.0.0",
     "@tensorflow/tfjs-node": "^4.19.0",

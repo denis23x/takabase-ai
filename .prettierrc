@@ -11,6 +11,17 @@
         "arrowParens": "avoid",
         "insertPragma": true
       }
+    },
+    {
+      "files": "*.html",
+      "options": {
+        "printWidth": 100,
+        "tabWidth": 2,
+        "useTabs": true,
+        "bracketSameLine": false,
+        "singleQuote": false,
+        "insertPragma": true
+      }
     }
   ]
 }
