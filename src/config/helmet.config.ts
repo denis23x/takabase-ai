@@ -1,6 +1,12 @@
 /** @format */
 
 import { FastifyHelmetOptions } from '@fastify/helmet';
+import { config } from 'dotenv';
+
+config({
+  path: '.env.takabase-local',
+  override: false
+});
 
 // https://github.com/fastify/fastify-helmet
 

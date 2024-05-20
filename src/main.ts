@@ -1,6 +1,6 @@
 /** @format */
 
-import fastify, { FastifyRequest, FastifyInstance, FastifyReply } from "fastify"
+import fastify, { FastifyRequest, FastifyInstance, FastifyReply } from 'fastify';
 import { ContentTypeParserDoneFunction } from 'fastify/types/content-type-parser';
 import fastifyCors from '@fastify/cors';
 import fastifyCompress from '@fastify/compress';
@@ -33,13 +33,16 @@ import moderationRoutes from './routes/moderation';
 // SCHEMAS
 
 import { responseErrorSchema } from './schema/crud/response/response-error.schema';
-import { moderationImageSchema } from './schema/moderation/moderation-image.schema';
-import { moderationTextSchema } from './schema/moderation/moderation-text.schema';
 
 export const main = async (): Promise<FastifyInstance> => {
   const fastifyInstance: FastifyInstance = fastify({
     ignoreTrailingSlash: true,
     ignoreDuplicateSlashes: true,
+    ajv: {
+      customOptions: {
+        keywords: ['example']
+      }
+    },
     logger: loggerConfig
   });
 
@@ -55,7 +58,7 @@ export const main = async (): Promise<FastifyInstance> => {
   // INDEX
 
   fastifyInstance.setNotFoundHandler((request: FastifyRequest, reply: FastifyReply) => {
-    return reply.code(404).type('text/html').sendFile('index.html');
+    return reply.code(200).type('text/html').sendFile('index.html');
   });
 
   // PLUGINS HANDMADE
@@ -66,11 +69,6 @@ export const main = async (): Promise<FastifyInstance> => {
   // JSON SCHEMA CRUD
 
   fastifyInstance.addSchema(responseErrorSchema);
-
-  // JSON SCHEMA MODELS
-
-  fastifyInstance.addSchema(moderationImageSchema);
-  fastifyInstance.addSchema(moderationTextSchema);
 
   // LOCALHOST
 

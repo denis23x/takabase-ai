@@ -12,13 +12,13 @@ config({
 
 const openaiConfigList: Record<string, ClientOptions> = {
   localhost: {
-    apiKey: String(process.env.OPENAI_API_KEY)
+    apiKey: String(process.env.AI_OPENAI_API_KEY)
   },
   development: {
-    apiKey: String(process.env.OPENAI_API_KEY)
+    apiKey: String(process.env.AI_OPENAI_API_KEY)
   },
   production: {
-    apiKey: String(process.env.OPENAI_API_KEY)
+    apiKey: String(process.env.AI_OPENAI_API_KEY)
   }
 };
 

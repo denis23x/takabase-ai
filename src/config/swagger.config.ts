@@ -3,19 +3,17 @@
 import { SwaggerOptions } from '@fastify/swagger';
 
 export const swaggerConfig: SwaggerOptions = {
-  swagger: {
+  openapi: {
     info: {
       title: 'APIs using Fastify',
-      description: 'Moderation using Swagger, Fastify and AI',
-      version: '0.0.1'
+      description: '## Moderation using Swagger, Fastify and AI',
+      contact: {
+        name: 'denis23x',
+        url: 'https://takabase.com',
+        email: 'damage.23x@gmail.com'
+      },
+      version: '1.0.0'
     },
-    externalDocs: {
-      url: 'https://swagger.io',
-      description: 'Find more info here'
-    },
-    schemes: ['http', 'https'],
-    consumes: ['application/json'],
-    produces: ['application/json'],
     tags: [
       {
         name: 'Moderation',

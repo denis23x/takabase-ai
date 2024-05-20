@@ -4,7 +4,7 @@ import { main } from './main';
 import { FastifyInstance } from 'fastify';
 import { FastifyListenOptions } from 'fastify/types/instance';
 import { HttpsFunction, HttpsOptions, onRequest, Request } from 'firebase-functions/v2/https';
-import * as express from 'express';
+import { Response } from 'express';
 
 /** FASTIFY */
 
@@ -41,15 +41,13 @@ main()
     // DEFAULT
     const options: FastifyListenOptions = {
       port: 4400,
-      host: 'localhost'
+      host: 'localhost',
+      listenTextResolver: () => ''
     };
 
     // PROCESS
 
-    fastifyInstance
-      .listen(options)
-      .then(() => fastifyInstance.log.info('Ready, Waiting for connections...'))
-      .catch((error: any) => fastifyInstance.log.error(error));
+    fastifyInstance.listen(options).catch((error: any) => fastifyInstance.log.error(error));
   })
   .catch((error: any) => {
     console.error(error);
@@ -67,13 +65,13 @@ export const apiHttpsOptions: HttpsOptions = {
   minInstances: 0,
   maxInstances: 4,
   memory: '512MiB',
-  secrets: [
+  secrets: process.env.APP_NODE_ENV === 'localhost' ? [] : [
     'APP_NODE_ENV',
     'AI_OPENAI_API_KEY'
   ]
 };
 
-export const ai: HttpsFunction = onRequest(apiHttpsOptions, async (request: Request, response: express.Response) => {
+export const ai: HttpsFunction = onRequest(apiHttpsOptions, async (request: Request, response: Response) => {
   const fastifyInstance: FastifyInstance = await main();
 
   await fastifyInstance.ready();

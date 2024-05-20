@@ -19,23 +19,32 @@ export default async function (fastify: FastifyInstance): Promise<void> {
         properties: {
           model: {
             type: 'string',
-            default: 'gantman-mobilenet-v2'
+            example: 'gantman-mobilenet-v2'
           },
           input: {
             type: 'string',
-            contentMediaType: 'image/png',
-            contentEncoding: 'binary'
+            format: 'binary'
           }
         },
-        required: ['model', 'input'],
-        additionalProperties: false
+        required: ['model', 'input']
       },
       response: {
         200: {
           type: 'object',
           properties: {
             data: {
-              $ref: 'moderationImageSchema#'
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  className: {
+                    type: 'string'
+                  },
+                  probability: {
+                    type: 'number'
+                  }
+                }
+              }
             },
             statusCode: {
               type: 'number'
