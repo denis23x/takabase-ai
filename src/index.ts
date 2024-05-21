@@ -65,7 +65,7 @@ export const apiHttpsOptions: HttpsOptions = {
   minInstances: 0,
   maxInstances: 4,
   memory: '512MiB',
-  secrets: process.env.APP_NODE_ENV === 'localhost' ? [] : [
+  secrets: [
     'APP_NODE_ENV',
     'AI_OPENAI_API_KEY'
   ]

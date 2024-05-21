@@ -85,45 +85,6 @@ export default async function (fastify: FastifyInstance): Promise<void> {
                             type: 'boolean'
                           }
                         }
-                      },
-                      category_scores: {
-                        type: 'object',
-                        // prettier-ignore
-                        properties: {
-                          'sexual': {
-                            type: 'number'
-                          },
-                          'hate': {
-                            type: 'number'
-                          },
-                          'harassment': {
-                            type: 'number'
-                          },
-                          'self-harm': {
-                            type: 'number'
-                          },
-                          'sexual/minors': {
-                            type: 'number'
-                          },
-                          'hate/threatening': {
-                            type: 'number'
-                          },
-                          'violence/graphic': {
-                            type: 'number'
-                          },
-                          'self-harm/intent': {
-                            type: 'number'
-                          },
-                          'self-harm/instructions': {
-                            type: 'number'
-                          },
-                          'harassment/threatening': {
-                            type: 'number'
-                          },
-                          'violence': {
-                            type: 'number'
-                          },
-                        }
                       }
                     }
                   }
