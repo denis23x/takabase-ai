@@ -28,7 +28,7 @@ export default async function (fastify: FastifyInstance): Promise<void> {
         required: ['model', 'input']
       },
       response: {
-        200: {
+        '200': {
           type: 'object',
           properties: {
             data: {
@@ -96,10 +96,10 @@ export default async function (fastify: FastifyInstance): Promise<void> {
             }
           }
         },
-        400: {
+        '4xx': {
           $ref: 'responseErrorSchema#'
         },
-        500: {
+        '5xx': {
           $ref: 'responseErrorSchema#'
         }
       }
@@ -120,7 +120,7 @@ export default async function (fastify: FastifyInstance): Promise<void> {
         .catch(() => {
           return reply.status(500).send({
             error: 'Internal Server Error',
-            message: 'Unable to moderate input text at this time',
+            message: 'Unable to moderate input text',
             statusCode: 500
           });
         });

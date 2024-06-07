@@ -29,7 +29,7 @@ export default async function (fastify: FastifyInstance): Promise<void> {
         required: ['model', 'input']
       },
       response: {
-        200: {
+        '200': {
           type: 'object',
           properties: {
             data: {
@@ -51,10 +51,10 @@ export default async function (fastify: FastifyInstance): Promise<void> {
             }
           }
         },
-        400: {
+        '4xx': {
           $ref: 'responseErrorSchema#'
         },
-        500: {
+        '5xx': {
           $ref: 'responseErrorSchema#'
         }
       }
