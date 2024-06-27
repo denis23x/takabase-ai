@@ -1,7 +1,9 @@
-const prompts = require('prompts');
-const spawn = require('child_process').spawn;
+/** @format */
 
-const projectList = {
+import prompts from 'prompts';
+import { spawnSync } from 'child_process';
+
+const projectList: any = {
   ['takabase-dev']: {
     url: 'https://takabase-dev-api.web.app'
   },
@@ -10,25 +12,25 @@ const projectList = {
   },
   ['takabase-prod']: {
     url: 'https://takabase-prod-api.web.app'
-  },
+  }
 };
 
 (async () => {
-  const project = await prompts({
+  const project: prompts.Answers<string> = await prompts({
     type: 'select',
     name: 'project',
     message: 'Select a environment',
-    choices: Object.keys(projectList).map((key ) => {
+    choices: Object.keys(projectList).map((key: string) => {
       return {
         title: key,
         value: key,
-        description: projectList[key].url,
-      }
+        description: projectList[key].url
+      };
     }),
     initial: 0
   });
 
-  const action = await prompts({
+  const action: prompts.Answers<string> = await prompts({
     type: 'select',
     name: 'action',
     message: 'Select an action',
@@ -36,18 +38,18 @@ const projectList = {
       {
         title: 'Deploy function',
         value: 'function',
-        description: projectList[project.project].url,
+        description: projectList[project.project].url
       },
       {
         title: 'Deploy hosting',
         value: 'hosting',
-        description: projectList[project.project].url,
+        description: projectList[project.project].url
       }
     ],
     initial: 0
   });
 
-  const confirm = await prompts({
+  const confirm: prompts.Answers<string> = await prompts({
     type: 'confirm',
     name: 'confirm',
     message: 'Can you confirm?',
@@ -55,7 +57,7 @@ const projectList = {
   });
 
   if (project.project && action.action && confirm.confirm) {
-    const command = [`firebase use ${project.project}`];
+    const command: string[] = [`firebase use ${project.project}`];
 
     if (action.action === 'function') {
       command.push(`firebase deploy --only functions:ai`);
@@ -67,9 +69,9 @@ const projectList = {
 
     /** RUN */
 
-    spawn(command.join(' && '), {
+    spawnSync(command.join(' && '), {
       shell: true,
-      stdio:'inherit'
+      stdio: 'inherit'
     });
   } else {
     console.log('Ok, Bye!');

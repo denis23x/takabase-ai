@@ -40,7 +40,7 @@ main()
 
     // DEFAULT
     const options: FastifyListenOptions = {
-      port: 4400,
+      port: 4500,
       host: 'localhost',
       listenTextResolver: () => ''
     };

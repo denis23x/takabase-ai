@@ -14,7 +14,7 @@
   },
   "scripts": {
     "start:dev": "npm-watch start:functions",
-    "start:deploy": "node firebase-deploy.js",
+    "start:deploy": "ts-node deploy.ts",
     "start:functions": "npm run build:prod && npx @google-cloud/functions-framework --target=ai --port=8090",
     "build:prod": "tsc -p tsconfig.json && mkdir -p dist/nsfw && cp -R src/nsfw dist && cp src/index.html dist"
   },
@@ -49,6 +49,7 @@
     "@commitlint/config-conventional": "^19.2.2",
     "@types/busboy": "^1.5.4",
     "@types/node": "^20.12.12",
+    "@types/prompts": "^2.4.9",
     "@typescript-eslint/eslint-plugin": "^7.9.0",
     "@typescript-eslint/parser": "^7.9.0",
     "eslint": "^9.3.0",
