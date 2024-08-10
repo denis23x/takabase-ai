@@ -1,10 +1,11 @@
 /** @format */
 
-import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from 'fastify';
+import Busboy from 'busboy';
 import * as tfjs from '@tensorflow/tfjs-node';
 import * as nsfw from 'nsfwjs';
-import { ModerationImageDto } from '../../types/dto/moderation/moderation-image';
-import Busboy from 'busboy';
+import type { NSFWJS } from 'nsfwjs';
+import type { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from 'fastify';
+import type { ModerationImageDto } from '../../types/dto/moderation/moderation-image';
 
 export default async function (fastify: FastifyInstance): Promise<void> {
   fastify.route({
@@ -125,7 +126,7 @@ export default async function (fastify: FastifyInstance): Promise<void> {
             tfjs.enableProdMode();
           }
 
-          const nsfwModel: nsfw.NSFWJS = await request.server.nsfw.getModel(formFields.model);
+          const nsfwModel: NSFWJS = await request.server.nsfw.getModel(formFields.model);
           const tensorArray: Uint8Array = new Uint8Array(formFiles.input.file);
           const tensor: tfjs.Tensor3D | tfjs.Tensor4D = tfjs.node.decodeImage(tensorArray, 3);
 

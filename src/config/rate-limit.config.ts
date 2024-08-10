@@ -1,7 +1,7 @@
 /** @format */
 
-import { FastifyRateLimitOptions } from '@fastify/rate-limit';
 import { config } from 'dotenv';
+import type { FastifyRateLimitOptions } from '@fastify/rate-limit';
 
 config({
   path: '.env.takabase-local',

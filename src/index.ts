@@ -1,10 +1,11 @@
 /** @format */
 
 import { main } from './main';
-import { FastifyInstance } from 'fastify';
-import { FastifyListenOptions } from 'fastify/types/instance';
-import { HttpsFunction, HttpsOptions, onRequest, Request } from 'firebase-functions/v2/https';
-import { Response } from 'express';
+import { onRequest } from 'firebase-functions/v2/https';
+import type { FastifyInstance } from 'fastify';
+import type { FastifyListenOptions } from 'fastify/types/instance';
+import type { HttpsFunction, HttpsOptions, Request } from 'firebase-functions/v2/https';
+import type { Response } from 'express';
 
 /** FASTIFY */
 

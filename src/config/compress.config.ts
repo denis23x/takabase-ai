@@ -1,6 +1,6 @@
 /** @format */
 
-import { FastifyCompressOptions } from '@fastify/compress';
+import type { FastifyCompressOptions } from '@fastify/compress';
 
 // https://github.com/fastify/fastify-compress
 

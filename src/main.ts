@@ -1,7 +1,6 @@
 /** @format */
 
-import fastify, { FastifyRequest, FastifyInstance, FastifyReply } from 'fastify';
-import { ContentTypeParserDoneFunction } from 'fastify/types/content-type-parser';
+import fastify from 'fastify';
 import fastifyCors from '@fastify/cors';
 import fastifyCompress from '@fastify/compress';
 import fastifyHelmet from '@fastify/helmet';
@@ -10,6 +9,8 @@ import fastifySwaggerUi from '@fastify/swagger-ui';
 import fastifyRateLimit from '@fastify/rate-limit';
 import fastifyStatic from '@fastify/static';
 import fastifyEtag from '@fastify/etag';
+import type { FastifyRequest, FastifyInstance, FastifyReply } from 'fastify';
+import type { ContentTypeParserDoneFunction } from 'fastify/types/content-type-parser';
 
 // CONFIGURATIONS
 

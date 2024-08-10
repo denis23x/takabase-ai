@@ -1,7 +1,7 @@
 /** @format */
 
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import { ModerationTextDto } from '../../types/dto/moderation/moderation-text';
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import type { ModerationTextDto } from '../../types/dto/moderation/moderation-text';
 
 export default async function (fastify: FastifyInstance): Promise<void> {
   fastify.route({

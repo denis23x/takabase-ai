@@ -1,9 +1,10 @@
 /** @format */
 
 import fp from 'fastify-plugin';
-import { FastifyInstance, FastifyPluginAsync, FastifyReply } from 'fastify';
 import * as nsfw from 'nsfwjs';
 import path from 'path';
+import type { NSFWJS } from 'nsfwjs';
+import type { FastifyInstance, FastifyPluginAsync, FastifyReply } from 'fastify';
 
 const nsfwModelOptions: Record<string, any> = {
   'gantman-mobilenet-v2': {
@@ -19,7 +20,7 @@ const nsfwModelOptions: Record<string, any> = {
 const nsfwPlugin: FastifyPluginAsync = fp(async function (fastifyInstance: FastifyInstance) {
   fastifyInstance.decorate('nsfw', {
     // prettier-ignore
-    getModel: (modelName: string): Promise<nsfw.NSFWJS> => {
+    getModel: (modelName: string): Promise<NSFWJS> => {
       return nsfw.load('file://' + path.join(__dirname, '../nsfw', modelName, 'model.json'), nsfwModelOptions[modelName]);
     },
     getValidationModel: (reply: FastifyReply, modelName: string): FastifyReply | null => {

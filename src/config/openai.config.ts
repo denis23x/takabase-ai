@@ -1,7 +1,7 @@
 /** @format */
 
-import { ClientOptions } from 'openai';
 import { config } from 'dotenv';
+import type { ClientOptions } from 'openai';
 
 config({
   path: '.env.takabase-local',

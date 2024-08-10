@@ -1,6 +1,6 @@
 /** @format */
 
-import OpenAI from 'openai';
+import type OpenAI from 'openai';
 
 declare module 'fastify' {
   interface FastifyInstance {

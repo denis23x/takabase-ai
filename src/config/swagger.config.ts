@@ -1,6 +1,6 @@
 /** @format */
 
-import { SwaggerOptions } from '@fastify/swagger';
+import type { SwaggerOptions } from '@fastify/swagger';
 
 export const swaggerConfig: SwaggerOptions = {
   openapi: {
