@@ -1,6 +1,6 @@
 /** @format */
 
-export type ModerationImageDto = {
+export type ModerationNSFWDto = {
   Body: {
     model: string;
     input: string;

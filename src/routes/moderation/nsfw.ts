@@ -5,15 +5,15 @@ import * as tfjs from '@tensorflow/tfjs-node';
 import * as nsfw from 'nsfwjs';
 import type { NSFWJS } from 'nsfwjs';
 import type { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from 'fastify';
-import type { ModerationImageDto } from '../../types/dto/moderation/moderation-image';
+import type { ModerationNSFWDto } from '../../types/dto/moderation/moderation-nsfw';
 
 export default async function (fastify: FastifyInstance): Promise<void> {
   fastify.route({
     method: 'POST',
-    url: 'image',
+    url: 'nsfw',
     schema: {
       tags: ['Moderation'],
-      description: 'Moderates an image',
+      description: 'Moderates an nsfw image',
       consumes: ['multipart/form-data'],
       body: {
         type: 'object',
@@ -61,7 +61,7 @@ export default async function (fastify: FastifyInstance): Promise<void> {
       }
     },
     // prettier-ignore
-    preValidation: (request: FastifyRequest<ModerationImageDto>, reply: FastifyReply, done: HookHandlerDoneFunction): void => {
+    preValidation: (request: FastifyRequest<ModerationNSFWDto>, reply: FastifyReply, done: HookHandlerDoneFunction): void => {
       // Swagger pass validation
 
       request.body = {
@@ -71,7 +71,7 @@ export default async function (fastify: FastifyInstance): Promise<void> {
 
       done();
     },
-    handler: async (request: FastifyRequest<ModerationImageDto>, reply: FastifyReply): Promise<any> => {
+    handler: async (request: FastifyRequest<ModerationNSFWDto>, reply: FastifyReply): Promise<any> => {
       const busboy: Busboy.Busboy = Busboy({
         headers: request.headers
       });

@@ -41,7 +41,7 @@ export const main = async (): Promise<FastifyInstance> => {
     ignoreDuplicateSlashes: true,
     ajv: {
       customOptions: {
-        removeAdditional: 'all',
+        // removeAdditional: 'all',
         keywords: ['example']
       }
     },
