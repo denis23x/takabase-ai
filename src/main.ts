@@ -57,10 +57,12 @@ export const main = async (): Promise<FastifyInstance> => {
   await fastifyInstance.register(fastifyStatic, staticConfig);
   await fastifyInstance.register(fastifyEtag);
 
-  // INDEX
+  // NOINDEX
 
-  fastifyInstance.setNotFoundHandler((request: FastifyRequest, reply: FastifyReply) => {
-    return reply.code(200).type('text/html').sendFile('index.html');
+  fastifyInstance.addHook('onSend', async (_, reply: FastifyReply, payload) => {
+    reply.header('X-Robots-Tag', 'noindex');
+
+    return payload;
   });
 
   // PLUGINS HANDMADE

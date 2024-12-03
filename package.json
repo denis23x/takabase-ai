@@ -16,7 +16,7 @@
     "start:dev": "npm-watch start:functions",
     "start:deploy": "ts-node deploy.ts",
     "start:functions": "npm run build:prod && npx @google-cloud/functions-framework --target=ai --port=8090",
-    "build:prod": "tsc -p tsconfig.json && mkdir -p dist/nsfw && cp -R src/nsfw dist && cp src/index.html dist"
+    "build:prod": "tsc -p tsconfig.json && mkdir -p dist/nsfw && cp -R src/nsfw dist && mkdir -p dist/public && cp -r src/public dist"
   },
   "keywords": [
     "node",
